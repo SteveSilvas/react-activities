@@ -1,0 +1,57 @@
+.page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 90vh;
+    background-color: var(--cor-tres);
+}
+
+.formulario{
+    width: 30vw;
+    border: 1px solid var(--cor-cinco);
+    border-radius: 4px;
+    padding: 2%;
+    background-color: white;
+}
+
+.divisoria{
+    color: var(--cor-tres);
+}
+
+.subtitulo{
+    font-size: 1.3em
+}
+
+.row{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0px;
+}
+.row label{
+    font-weight: bold;
+}
+
+.input{
+    margin: none;
+    width: 250px;
+    padding: 4px;
+    border: 1px solid var(--cor-cinco);
+    border-radius: 4px;
+}
+
+.buttonSave{
+    background-color:var(--cor-quatro);
+    color: aliceblue;
+    border: 2px solid var(--cor-quatro);
+    font-size: 1.4em;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .buttonSave:hover{
+    border: 2px solid var(--cor-dois);
+    transform: scale(1.1);
+  }
+  

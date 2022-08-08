@@ -1,0 +1,35 @@
+.menu{
+    height: 10vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cor-tres);
+}
+
+.row{
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.divisoria{
+    color: white;
+    width: 98vw;
+}
+
+.buttonSave{
+    background-color:var(--cor-quatro);
+    color: aliceblue;
+    border: 2px solid var(--cor-quatro);
+    font-size: 1.1em;
+    padding: 4px;
+    margin: 0px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .buttonSave:hover{
+    border: 2px solid var(--cor-dois);
+    transform: scale(1.1);
+  }
+  
