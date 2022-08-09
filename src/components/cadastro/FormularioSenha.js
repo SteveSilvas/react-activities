@@ -47,8 +47,9 @@ function FormularioSenha(){
     function verificarIgualdade(){
         if(senha === senha2){
             console.log(`senhas iguais ${senha}`);
-            setShowSucessMessage(true);
             setMessage("Deu tudo certo");
+            setShowSucessMessage(true);
+            
         }else{
             //mensagem de erro
         }

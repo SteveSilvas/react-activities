@@ -71,6 +71,7 @@ function Cadastro() {
     function cadastrar(e) {
         e.preventDefault();
         if (verificationFieldsComplete()) {
+            console.log('verificacao completa no if do cadastrar');
             buildClientObject();
             showClienteDatas();
             handleEnableFormPassWord();
@@ -85,15 +86,17 @@ function Cadastro() {
     function verificationFieldsComplete() {
         todosCamposEstaoPreenchidos();
 
-        // if(errorForm == false){
-        //     return true;
-        // }
+        if(errorForm == false){
+            return true;
+        }
     }
 
 
     function todosCamposEstaoPreenchidos() {
+        console.log('nome ',nome);
         if (nome != null && sobrenome != null && nascimento != null && sexo != null && endereco != null && numero != null && bairro != null && cidade != null && estado != null && telefone != null && email != null) {
             setErrorForm(false);
+            console.log('entrei no if');
         }
         else {
             setErrorForm(true);
