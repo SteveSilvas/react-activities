@@ -1,31 +1,38 @@
-import styles from './Cadastro.module.css'
-import FormularioSenha from './FormularioSenha';
+import styles from "./Cadastro.module.css";
+import FormularioSenha from "./FormularioSenha";
 import { useState } from "react";
-import SuccessErrorMessage from '../modelos/SuccessErrorMessage/SuccessErrorMessage';
-
-
+import GetCepButton from "../GetCep/GetCepButton";
+import SuccessMessage from "../modelos/SuccessErrorMessage/SuccessMessage";
+import ErrorMessage from "../modelos/SuccessErrorMessage/ErrorMessage";
 
 function Cadastro() {
-    var [nome, setNome] = useState(null);
-    var [sobrenome, setSobrenome] = useState(null);
-    var [nascimento, setNascimento] = useState(null);
-    var [sexo, setSexo] = useState(null);
-    var [endereco, setEndereco] = useState(null);
-    var [numero, setNumero] = useState(null);
-    var [complemento, setComplemento] = useState(null);
-    var [bairro, setBairro] = useState(null);
-    var [cidade, setCidade] = useState(null);
-    var [estado, setEstado] = useState(null);
-    var [telefone, setTelefone] = useState(null);
-    var [email, setEmail] = useState(null);
-    var [cliente, setCliente] = useState({});
-    const [errorForm, setErrorForm] = useState(null);
-    var [errorMessage, setErrorMessage] = useState(null);
+    const [nome, setNome] = useState();
+    const [sobrenome, setSobrenome] = useState();
+    const [nascimento, setNascimento] = useState();
+    const [sexo, setSexo] = useState();
+    const [cep, setCEP] = useState();
+    const [endereco, setEndereco] = useState();
+    const [logradouro, setLogradouro] = useState();
+    const [numero, setNumero] = useState();
+    const [complemento, setComplemento] = useState();
+    const [bairro, setBairro] = useState();
+    const [cidade, setCidade] = useState();
+    const [estado, setEstado] = useState();
+    const [ddd, setDDD] = useState();
+    const [ibge, setIBGE] = useState();
+    const [telefone, setTelefone] = useState();
+    const [email, setEmail] = useState();
+    const [cliente, setCliente] = useState({});
+    const [senha, setSenha] = useState();
 
-    const [showErrorMessage, setShowErrorMessage] = useState(null);
-    const [showSuccessMessage, setShowSucessMessage] = useState(null);
+    const [messageModal, setMessageModal] = useState({
+        showMessage: false,
+        textMessage: "",
+        typeMessage: null,
+    });
+
     const [showFormCadastro, setShowFormCadastro] = useState(true);
-
+    const [showFormPassword, setShowFormPassword] = useState(false);
     function renderOptionsStates() {
         return (
             <>
@@ -59,48 +66,39 @@ function Cadastro() {
                 <option value="TO">Tocantins</option>
                 <option value="EX">Estrangeiro</option>
             </>
-        )
+        );
     }
 
-
-    function handleEnableFormPassWord() {
-        setShowFormCadastro(!showFormCadastro);
-    }
-
-
-    function cadastrar(e) {
+    function startRegistration(e) {
         e.preventDefault();
-        if (verificationFieldsComplete()) {
-            console.log('verificacao completa no if do cadastrar');
-            buildClientObject();
-            showClienteDatas();
-            handleEnableFormPassWord();
-            showSuccessMessage("Cadastro realizado com sucesso");
+        if (checkFilledFields()) {
+            setShowFormCadastro(false);
+            setShowFormPassword(true);
         }
-        else {
-            setErrorMessage("Preencha todos os campos");
-        }
-
     }
 
-    function verificationFieldsComplete() {
-        todosCamposEstaoPreenchidos();
-
-        if(errorForm == false){
+    function checkFilledFields() {
+        if (
+            nome &&
+            sobrenome &&
+            nascimento &&
+            sexo &&
+            endereco &&
+            numero &&
+            bairro &&
+            cidade &&
+            estado &&
+            telefone &&
+            email
+        )
             return true;
-        }
-    }
 
-
-    function todosCamposEstaoPreenchidos() {
-        console.log('nome ',nome);
-        if (nome != null && sobrenome != null && nascimento != null && sexo != null && endereco != null && numero != null && bairro != null && cidade != null && estado != null && telefone != null && email != null) {
-            setErrorForm(false);
-            console.log('entrei no if');
-        }
-        else {
-            setErrorForm(true);
-        }
+        setMessageModal({
+            showMessage: true,
+            textMessage: "Preencha todos os campos",
+            typeMessage: 0,
+        });
+        return false;
     }
 
     function buildClientObject() {
@@ -116,88 +114,182 @@ function Cadastro() {
             Cidade: cidade,
             Estado: estado,
             Telefone: telefone,
-            Email: email
+            Email: email,
+            Senha: senha,
         });
     }
 
-    function showClienteDatas() {
-        console.log(cliente);
-    }
+    const setEnderecoHandle = (endereco) => {
+        setEndereco(endereco);
+        setLogradouro(endereco.logradouro);
+        setBairro(endereco.bairro);
+        setCEP(endereco.cep);
+        setDDD(endereco.ddd);
+        setIBGE(endereco.ibge);
+        setCidade(endereco.localidade);
+        setEstado(endereco.uf);
+    };
 
     function renderFormCadastro() {
         return showFormCadastro ? (
-            <div>
-                <form onSubmit={cadastrar} className={styles.formulario}>
-                    <div>
-                        <strong className={styles.subtitulo}>Cadastro</strong>
-                        <hr className={styles.divisoria}></hr>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Nome:</label>
-                        <input className={styles.input} type="text" id="nome" onChange={(e) => setNome(e.target.value)} value={nome}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Sobrenome:</label>
-                        <input className={styles.input} type="text" id="sobrenome" onChange={(e) => setSobrenome(e.target.value)} value={sobrenome}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Data de Nascimento:</label>
-                        <input className={styles.input} type="date" id="nascimento" onChange={(e) => setNascimento(e.target.value)} value={nascimento}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Sexo:</label>
-                        <select className={styles.input} id="sexo" onChange={(e) => setSexo(e.target.value)}>
-                            <option value="m">Masculino</option>
-                            <option value="f">Feminino</option>
-                            <option value="o">Outro</option>
-                        </select>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Endereço:</label>
-                        <input className={styles.input} type="text" id="endereco" onChange={(e) => setEndereco(e.target.value)}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Número:</label>
-                        <input className={styles.input} type="text" id="numero" onChange={(e) => setNumero(e.target.value)}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Complemento:</label>
-                        <input className={styles.input} type="text" id="complemento" onChange={(e) => setComplemento(e.target.value)}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Bairro:</label>
-                        <input className={styles.input} type="text" id="bairro" onChange={(e) => setBairro(e.target.value)}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Cidade:</label>
-                        <input className={styles.input} type="text" id="cidade" onChange={(e) => setCidade(e.target.value)}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Estado:</label>
-                        <select className={styles.input} id="estado" onChange={(e) => setEstado(e.target.value)}>
-                            {renderOptionsStates()}
-                        </select>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Telefone:</label>
-                        <input className={styles.input} type="text" id="telefone" onChange={(e) => setTelefone(e.target.value)}></input>
-                    </div>
-                    <div className={styles.row}>
-                        <label>Email:</label>
-                        <input className={styles.input} type="email" id="email" onChange={(e) => setEmail(e.target.value)}></input>
-                    </div>
-                    {renderButtonsFooter()}
-                </form>
-            </div>
-        ) : "";
+            <form className={styles.formulario}>
+                <div>
+                    <strong className={styles.subtitulo}>Cadastro</strong>
+                    <hr className={styles.divisoria}></hr>
+                </div>
+                <div className={styles.row}>
+                    <label>Nome:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="nome"
+                        onChange={(e) => setNome(e.target.value)}
+                        value={nome}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Sobrenome:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="sobrenome"
+                        onChange={(e) => setSobrenome(e.target.value)}
+                        value={sobrenome}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Data de Nascimento:</label>
+                    <input
+                        className={styles.input}
+                        type="date"
+                        id="nascimento"
+                        onChange={(e) => setNascimento(e.target.value)}
+                        value={nascimento}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Sexo:</label>
+                    <select
+                        className={styles.input}
+                        id="sexo"
+                        onChange={(e) => setSexo(e.target.value)}
+                    >
+                        <option value="m">Masculino</option>
+                        <option value="f">Feminino</option>
+                        <option value="o">Outro</option>
+                    </select>
+                </div>
+                <div className={styles.row}>
+                    <label>CEP:</label>
+                    <GetCepButton
+                        className={styles.inputCEP}
+                        setEndereco={setEnderecoHandle}
+                    ></GetCepButton>
+                </div>
+                <div className={styles.row}>
+                    <label>Logradouro:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="endereco"
+                        value={logradouro}
+                        onChange={(e) => setEndereco(e.target.value)}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Número:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="numero"
+                        onChange={(e) => setNumero(e.target.value)}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Complemento:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="complemento"
+                        onChange={(e) => setComplemento(e.target.value)}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Bairro:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="bairro"
+                        value={bairro}
+                        onChange={(e) => setBairro(e.target.value)}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Cidade:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="cidade"
+                        value={cidade}
+                        onChange={(e) => setCidade(e.target.value)}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Estado:</label>
+                    <select
+                        className={styles.input}
+                        id="estado"
+                        value={estado}
+                        onChange={(e) => setEstado(e.target.value)}
+                    >
+                        {renderOptionsStates()}
+                    </select>
+                </div>
+                <div className={styles.row}>
+                    <label>Telefone:</label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        id="telefone"
+                        onChange={(e) => setTelefone(e.target.value)}
+                    ></input>
+                </div>
+                <div className={styles.row}>
+                    <label>Email:</label>
+                    <input
+                        className={styles.input}
+                        type="email"
+                        id="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                    ></input>
+                </div>
+                {renderButtonsFooter()}
+            </form>
+        ) : (
+            ""
+        );
+    }
+    const setSenhaHandler = (senha) => {
+        setShowFormPassword(false);
+        setSenha(senha);
+        handleSuccesSave();
+    };
+
+    const handleSuccesSave = ()=>{
+        buildClientObject();
+        setMessageModal({
+            showMessage: true,
+            textMessage: `Usuário ${nome} cadastrado com sucesso.`,
+            typeMessage: 1,
+        });
     }
 
     function renderFormPassWord() {
-        return !showFormCadastro ? (
-            <div>
-                <FormularioSenha></FormularioSenha>
-            </div>
-        ) : "";
+        return (
+            showFormPassword && (
+                <FormularioSenha setSenha={setSenhaHandler}></FormularioSenha>
+            )
+        );
     }
 
     return (
@@ -205,26 +297,58 @@ function Cadastro() {
             {renderSuccessErrorMessage()}
             {renderFormCadastro()}
             {renderFormPassWord()}
-        </div>);
-}
-
-function renderSuccessErrorMessage() {
-    // if (errorForm == true && showErrorMessage) {
-    //     return (
-    //         <>
-    //             <SuccessErrorMessage type={"error"}></SuccessErrorMessage>
-    //         </>
-    //     )
-    // }
-
-}
-
-function renderButtonsFooter() {
-    return (
-        <div>
-            <button className={styles.buttonSave} type="submit" >Salvar</button>
         </div>
     );
+
+    function renderButtonsFooter() {
+        return (
+            <div>
+                <button
+                    className={styles.buttonSave}
+                    onClick={(e) => startRegistration(e)}
+                >
+                    Salvar
+                </button>
+            </div>
+        );
+    }
+
+    function renderSuccessErrorMessage() {
+        let showMessage = messageModal.showMessage;
+        let textMessage = messageModal.textMessage;
+        let typeMessage = messageModal.typeMessage;
+
+        const hideModalHandler = () => {
+            setMessageModal({
+                showMessage: false,
+                textMessage: "",
+                typeMessage: 0,
+            });
+        };
+        
+        if (showMessage) {
+            console.log(typeMessage);
+            if (typeMessage) {
+                return (
+                    <>
+                        <SuccessMessage
+                            textMessage={textMessage}
+                            hideModal={hideModalHandler}
+                        ></SuccessMessage>
+                    </>
+                );
+            } else {
+                return (
+                    <>
+                        <ErrorMessage
+                            textMessage={textMessage}
+                            hideModal={hideModalHandler}
+                        ></ErrorMessage>
+                    </>
+                );
+            }
+        }
+    }
 }
 
 export default Cadastro;

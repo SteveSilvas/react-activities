@@ -3,8 +3,8 @@ function TesteMessages(){
     return(
         <div>
             <SuccessErrorMessage
-                type="success"
-                message="Deu tudo certo"
+                type={1}
+                message="Deu tudo certo de novo"
             ></SuccessErrorMessage>
         </div>
     )
